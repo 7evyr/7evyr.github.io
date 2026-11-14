@@ -6,23 +6,26 @@
       "title": "Keep",
       "desc": "Password vault for Windows. Opens with your PIN, never leaves your PC.",
       "tag": "Windows app",
+      "icon": "lock",
       "url": "https://github.com/7evyr/keep-vault"
     },
     {
       "title": "Nebula",
       "desc": "Your Obsidian notes as a glowing 3D constellation.",
       "tag": "Obsidian plugin",
+      "icon": "orbit",
       "url": "https://github.com/7evyr/obsidian-nebula"
     },
     {
       "title": "SignalDesk",
       "desc": "Know if your bet is worth it. Every bet gets a price, every pick graded after the game.",
       "tag": "Website",
+      "icon": "chart",
       "url": "https://signaldesks.app"
     }
   ],
   "footer": {
-    "text": "GitHub",
+    "text": "github.com/7evyr",
     "url": "https://github.com/7evyr"
   }
 }

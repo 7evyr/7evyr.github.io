@@ -15,45 +15,74 @@
 <style>
 @font-face { font-family: 'Inter'; src: url('inter.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
 :root {
-  --bg: #000; --card: #0b0b0d; --card-hover: #121215; --line: rgba(255, 255, 255, .08); --line-hover: rgba(255, 255, 255, .16);
-  --text: #f5f5f7; --soft: #8e8e95; --faint: #5c5c63;
+  --bg: #000; --text: #f5f5f7; --soft: #8e8e96; --faint: #5d5d65;
+  --card: rgba(255, 255, 255, .025); --line: rgba(255, 255, 255, .075);
   --ease: cubic-bezier(.22, 1, .36, 1);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { background: var(--bg); color-scheme: dark; }
 body { min-height: 100svh; font-family: Inter, system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; color: var(--text); background: var(--bg);
-  display: flex; justify-content: center; padding: max(72px, env(safe-area-inset-top)) 20px max(40px, env(safe-area-inset-bottom)); }
-main { width: 100%; max-width: 520px; display: flex; flex-direction: column; }
-.head { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 36px; }
-.mark { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; background: #111114; border: 1px solid var(--line);
-  font-size: 30px; font-weight: 700; letter-spacing: -0.04em; margin-bottom: 18px; }
-h1 { font-size: 26px; font-weight: 650; letter-spacing: -0.03em; }
-.bio { margin-top: 6px; font-size: 16px; color: var(--soft); letter-spacing: -0.01em; }
-.links { display: flex; flex-direction: column; gap: 10px; }
-.link { display: flex; align-items: center; gap: 16px; padding: 18px 18px 18px 20px; border-radius: 16px; background: var(--card); border: 1px solid var(--line);
-  color: inherit; text-decoration: none; transition: background .2s, border-color .2s, transform .2s var(--ease); }
-.link:hover { background: var(--card-hover); border-color: var(--line-hover); }
+  display: flex; justify-content: center; padding: max(88px, env(safe-area-inset-top)) 20px max(48px, env(safe-area-inset-bottom)); overflow-x: hidden; }
+
+/* backdrop: one soft light from above, a faint dot grid that fades out, and film grain */
+.sky { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+.sky::before { content: ''; position: absolute; left: 50%; top: -340px; width: 900px; height: 640px; translate: -50% 0; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, .09), rgba(255, 255, 255, 0)); animation: breathe 9s ease-in-out infinite alternate; }
+.sky::after { content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, .09) 1px, transparent 1.3px); background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(ellipse 60% 45% at 50% 0%, #000 0%, transparent 100%); mask-image: radial-gradient(ellipse 60% 45% at 50% 0%, #000 0%, transparent 100%); }
+.grain { position: fixed; inset: -50%; pointer-events: none; z-index: 0; opacity: .05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+@keyframes breathe { from { opacity: .75; } to { opacity: 1; } }
+
+main { position: relative; z-index: 1; width: 100%; max-width: 500px; display: flex; flex-direction: column; }
+.head { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 44px; }
+.mark { position: relative; width: 84px; height: 84px; border-radius: 26px; display: grid; place-items: center; margin-bottom: 22px;
+  background: linear-gradient(180deg, #1a1a1e, #0b0b0d); font-size: 36px; font-weight: 700; letter-spacing: -0.05em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14), inset 0 0 0 1px rgba(255, 255, 255, .06), 0 20px 50px rgba(0, 0, 0, .6), 0 0 80px rgba(255, 255, 255, .06); }
+.mark span { background: linear-gradient(180deg, #fff 30%, #9a9aa2); -webkit-background-clip: text; background-clip: text; color: transparent; }
+h1 { font-size: 34px; font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; }
+.bio { margin-top: 8px; font-size: 16px; color: var(--soft); letter-spacing: -0.01em; }
+
+.links { display: flex; flex-direction: column; gap: 12px; }
+/* each card carries a soft spotlight that follows the pointer (--x, --y set in JS) */
+.link { --x: 50%; --y: 50%; position: relative; display: flex; align-items: center; gap: 16px; padding: 16px 18px 16px 16px; border-radius: 20px;
+  background: var(--card); border: 1px solid var(--line); color: inherit; text-decoration: none; overflow: hidden; isolation: isolate;
+  transition: border-color .3s, transform .35s var(--ease), background .3s; -webkit-tap-highlight-color: transparent; }
+.link::before { content: ''; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity .3s;
+  background: radial-gradient(260px circle at var(--x) var(--y), rgba(255, 255, 255, .07), transparent 70%); }
+.link:hover { border-color: rgba(255, 255, 255, .16); transform: translateY(-2px); }
+.link:hover::before { opacity: 1; }
 .link:active { transform: scale(.985); }
 .link:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+.ico { flex: none; width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; color: #e9e9ee;
+  background: linear-gradient(180deg, #19191d, #0e0e10); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1), inset 0 0 0 1px rgba(255, 255, 255, .05); }
+.ico svg { width: 22px; height: 22px; }
 .txt { flex: 1; min-width: 0; }
-.top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .title { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
-.tag { font-size: 13px; color: var(--faint); }
+.tag { font-size: 12px; font-weight: 500; color: var(--soft); padding: 2px 8px; border-radius: 999px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .06); }
 .desc { margin-top: 4px; font-size: 14px; line-height: 1.45; color: var(--soft); }
-.arrow { flex: none; color: var(--faint); transition: color .2s, transform .25s var(--ease); }
+.arrow { flex: none; color: var(--faint); transition: color .25s, transform .35s var(--ease); }
 .link:hover .arrow { color: var(--text); transform: translate(2px, -2px); }
-footer { margin-top: 36px; text-align: center; }
-footer a { font-size: 14px; color: var(--soft); text-decoration: none; }
-footer a:hover { color: var(--text); }
-.in { animation: up .7s var(--ease) both; animation-delay: calc(var(--i, 0) * 60ms); }
-@keyframes up { from { opacity: 0; transform: translateY(10px); } }
-@media (prefers-reduced-motion: reduce) { .in { animation: none; } .link, .arrow { transition: none; } }
+
+footer { margin-top: 40px; display: flex; justify-content: center; }
+footer a { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--soft); text-decoration: none; padding: 8px 14px; border-radius: 999px; transition: color .2s, background .2s; }
+footer a:hover { color: var(--text); background: rgba(255, 255, 255, .05); }
+footer svg { width: 16px; height: 16px; }
+
+.in { animation: up .8s var(--ease) both; animation-delay: calc(var(--i, 0) * 70ms); }
+@keyframes up { from { opacity: 0; transform: translateY(12px); filter: blur(4px); } }
+@media (prefers-reduced-motion: reduce) { .in, .sky::before { animation: none; } .link, .arrow { transition: none; } }
+@media (max-width: 420px) { h1 { font-size: 30px; } .link { padding: 14px 14px 14px 14px; gap: 14px; } .ico { width: 44px; height: 44px; } }
 </style>
 </head>
 <body>
+<div class="sky" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
 <main>
   <header class="head in">
-    <div class="mark" id="mark" aria-hidden="true">7</div>
+    <div class="mark" aria-hidden="true"><span id="mark">7</span></div>
     <h1 id="name">7evyr</h1>
     <p class="bio" id="bio"></p>
   </header>
@@ -62,7 +91,21 @@ footer a:hover { color: var(--text); }
 </main>
 <script>
 // Everything shown comes from links.json. Edit that file to add or change links.
+// "icon" can be: lock, orbit, chart, code, game, music, video, mail, link.
+const S = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const ICONS = {
+  lock: S('<rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/><circle cx="12" cy="15.5" r="1.1" fill="currentColor"/>'),
+  orbit: S('<circle cx="12" cy="12" r="2.4"/><ellipse cx="12" cy="12" rx="9.5" ry="4" transform="rotate(-25 12 12)"/><circle cx="19.6" cy="8.4" r="1.1" fill="currentColor"/>'),
+  chart: S('<path d="M4 19h16"/><path d="m5 15 4.5-4.5 3.5 3 6-7"/><path d="M15.5 6.5H19V10"/>'),
+  code: S('<path d="m8.5 8-4 4 4 4M15.5 8l4 4-4 4M13.5 5.5l-3 13"/>'),
+  game: S('<path d="M7 9h10a4 4 0 0 1 3.9 4.8l-.7 3.4a2 2 0 0 1-3.4 1L15 16H9l-1.8 2.2a2 2 0 0 1-3.4-1l-.7-3.4A4 4 0 0 1 7 9z"/><path d="M8 12v3M6.5 13.5h3"/><circle cx="16" cy="13" r=".9" fill="currentColor"/>'),
+  music: S('<path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>'),
+  video: S('<rect x="3.5" y="6" width="13" height="12" rx="3"/><path d="m16.5 10.5 4-2.5v8l-4-2.5"/>'),
+  mail: S('<rect x="3.5" y="5.5" width="17" height="13" rx="3"/><path d="m4.5 7.5 7.5 5.5 7.5-5.5"/>'),
+  link: S('<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'),
+};
 const ARROW = '<svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+const GH = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.5 2 2 6.6 2 12.2c0 4.5 2.9 8.3 6.8 9.7.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.4-3.4-1.4-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.2 10.2 0 0 0 22 12.2C22 6.6 17.5 2 12 2z"/></svg>';
 const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
 const safe = (u) => { try { const x = new URL(u, location.href); return /^(https?|mailto):$/.test(x.protocol) ? x.href : null; } catch { return null; } };
 fetch('links.json', { cache: 'no-cache' }).then((r) => r.json()).then((d) => {
@@ -73,16 +116,21 @@ fetch('links.json', { cache: 'no-cache' }).then((r) => r.json()).then((d) => {
     const href = safe(l.url); if (!href) return;
     const a = el('a', 'link in'); a.href = href; a.style.setProperty('--i', i + 1);
     if (!href.startsWith('mailto:')) { a.target = '_blank'; a.rel = 'noopener'; }
+    const ico = el('div', 'ico'); ico.innerHTML = ICONS[l.icon] || ICONS.link;
     const txt = el('div', 'txt'), top = el('div', 'top');
     top.append(el('span', 'title', l.title || href));
     if (l.tag) top.append(el('span', 'tag', l.tag));
     txt.append(top);
     if (l.desc) txt.append(el('p', 'desc', l.desc));
-    a.append(txt); a.insertAdjacentHTML('beforeend', ARROW);
+    a.append(ico, txt); a.insertAdjacentHTML('beforeend', ARROW);
+    a.addEventListener('pointermove', (e) => { const r = a.getBoundingClientRect(); a.style.setProperty('--x', e.clientX - r.left + 'px'); a.style.setProperty('--y', e.clientY - r.top + 'px'); });
     box.append(a);
   });
   const f = d.footer && safe(d.footer.url);
-  if (f) { const a = el('a', null, d.footer.text || f); a.href = f; a.target = '_blank'; a.rel = 'noopener'; const foot = document.getElementById('foot'); foot.className = 'in'; foot.style.setProperty('--i', (d.links || []).length + 1); foot.append(a); }
+  if (f) {
+    const a = el('a'); a.href = f; a.target = '_blank'; a.rel = 'noopener'; a.innerHTML = GH; a.append(el('span', null, d.footer.text || f));
+    const foot = document.getElementById('foot'); foot.className = 'in'; foot.style.setProperty('--i', (d.links || []).length + 1); foot.append(a);
+  }
 }).catch(() => { document.getElementById('bio').textContent = 'links.json has a typo. Check commas and quotes.'; });
 </script>
 </body>

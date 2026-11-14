@@ -11,9 +11,12 @@ Edit `links.json` (on github.com: open the file, press the pencil, then Commit c
   "title": "Keep",
   "desc": "One line about it.",
   "tag": "Windows app",
+  "icon": "lock",
   "url": "https://github.com/7evyr/keep-vault"
 }
 ```
+
+`icon` can be lock, orbit, chart, code, game, music, video, mail or link.
 
 Put a comma between links, none after the last one. The page updates about a minute after you commit.
 
