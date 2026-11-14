@@ -1,6 +1,6 @@
 {
   "name": "7evyr",
-  "bio": "Things I build. Free and open source.",
+  "bio": "Things I build.",
   "links": [
     {
       "title": "Keep",
@@ -15,10 +15,10 @@
       "url": "https://github.com/7evyr/obsidian-nebula"
     },
     {
-      "title": "Trench Report",
-      "desc": "Grades any Solana wallet's memecoin trading like a report card.",
-      "tag": "MCP server",
-      "url": "https://github.com/7evyr/trench-report-mcp"
+      "title": "SignalDesk",
+      "desc": "Know if your bet is worth it. Every bet gets a price, every pick graded after the game.",
+      "tag": "Website",
+      "url": "https://signaldesks.app"
     }
   ],
   "footer": {
