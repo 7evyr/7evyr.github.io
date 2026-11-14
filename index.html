@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>7evyr</title>
+<meta name="description" content="Things I build. Free and open source.">
+<meta property="og:title" content="7evyr">
+<meta property="og:description" content="Things I build. Free and open source.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#000000">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="inter.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face { font-family: 'Inter'; src: url('inter.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+:root {
+  --bg: #000; --card: #0b0b0d; --card-hover: #121215; --line: rgba(255, 255, 255, .08); --line-hover: rgba(255, 255, 255, .16);
+  --text: #f5f5f7; --soft: #8e8e95; --faint: #5c5c63;
+  --ease: cubic-bezier(.22, 1, .36, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--bg); color-scheme: dark; }
+body { min-height: 100svh; font-family: Inter, system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; color: var(--text); background: var(--bg);
+  display: flex; justify-content: center; padding: max(72px, env(safe-area-inset-top)) 20px max(40px, env(safe-area-inset-bottom)); }
+main { width: 100%; max-width: 520px; display: flex; flex-direction: column; }
+.head { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 36px; }
+.mark { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; background: #111114; border: 1px solid var(--line);
+  font-size: 30px; font-weight: 700; letter-spacing: -0.04em; margin-bottom: 18px; }
+h1 { font-size: 26px; font-weight: 650; letter-spacing: -0.03em; }
+.bio { margin-top: 6px; font-size: 16px; color: var(--soft); letter-spacing: -0.01em; }
+.links { display: flex; flex-direction: column; gap: 10px; }
+.link { display: flex; align-items: center; gap: 16px; padding: 18px 18px 18px 20px; border-radius: 16px; background: var(--card); border: 1px solid var(--line);
+  color: inherit; text-decoration: none; transition: background .2s, border-color .2s, transform .2s var(--ease); }
+.link:hover { background: var(--card-hover); border-color: var(--line-hover); }
+.link:active { transform: scale(.985); }
+.link:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+.txt { flex: 1; min-width: 0; }
+.top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.title { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
+.tag { font-size: 13px; color: var(--faint); }
+.desc { margin-top: 4px; font-size: 14px; line-height: 1.45; color: var(--soft); }
+.arrow { flex: none; color: var(--faint); transition: color .2s, transform .25s var(--ease); }
+.link:hover .arrow { color: var(--text); transform: translate(2px, -2px); }
+footer { margin-top: 36px; text-align: center; }
+footer a { font-size: 14px; color: var(--soft); text-decoration: none; }
+footer a:hover { color: var(--text); }
+.in { animation: up .7s var(--ease) both; animation-delay: calc(var(--i, 0) * 60ms); }
+@keyframes up { from { opacity: 0; transform: translateY(10px); } }
+@media (prefers-reduced-motion: reduce) { .in { animation: none; } .link, .arrow { transition: none; } }
+</style>
+</head>
+<body>
+<main>
+  <header class="head in">
+    <div class="mark" id="mark" aria-hidden="true">7</div>
+    <h1 id="name">7evyr</h1>
+    <p class="bio" id="bio"></p>
+  </header>
+  <nav class="links" id="links" aria-label="Projects"></nav>
+  <footer id="foot"></footer>
+</main>
+<script>
+// Everything shown comes from links.json. Edit that file to add or change links.
+const ARROW = '<svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+const safe = (u) => { try { const x = new URL(u, location.href); return /^(https?|mailto):$/.test(x.protocol) ? x.href : null; } catch { return null; } };
+fetch('links.json', { cache: 'no-cache' }).then((r) => r.json()).then((d) => {
+  if (d.name) { document.getElementById('name').textContent = d.name; document.title = d.name; document.getElementById('mark').textContent = d.name.trim()[0] || ''; }
+  document.getElementById('bio').textContent = d.bio || '';
+  const box = document.getElementById('links');
+  (d.links || []).forEach((l, i) => {
+    const href = safe(l.url); if (!href) return;
+    const a = el('a', 'link in'); a.href = href; a.style.setProperty('--i', i + 1);
+    if (!href.startsWith('mailto:')) { a.target = '_blank'; a.rel = 'noopener'; }
+    const txt = el('div', 'txt'), top = el('div', 'top');
+    top.append(el('span', 'title', l.title || href));
+    if (l.tag) top.append(el('span', 'tag', l.tag));
+    txt.append(top);
+    if (l.desc) txt.append(el('p', 'desc', l.desc));
+    a.append(txt); a.insertAdjacentHTML('beforeend', ARROW);
+    box.append(a);
+  });
+  const f = d.footer && safe(d.footer.url);
+  if (f) { const a = el('a', null, d.footer.text || f); a.href = f; a.target = '_blank'; a.rel = 'noopener'; const foot = document.getElementById('foot'); foot.className = 'in'; foot.style.setProperty('--i', (d.links || []).length + 1); foot.append(a); }
+}).catch(() => { document.getElementById('bio').textContent = 'links.json has a typo. Check commas and quotes.'; });
+</script>
+</body>
+</html>

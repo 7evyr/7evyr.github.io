@@ -1,0 +1,28 @@
+{
+  "name": "7evyr",
+  "bio": "Things I build. Free and open source.",
+  "links": [
+    {
+      "title": "Keep",
+      "desc": "Password vault for Windows. Opens with your PIN, never leaves your PC.",
+      "tag": "Windows app",
+      "url": "https://github.com/7evyr/keep-vault"
+    },
+    {
+      "title": "Nebula",
+      "desc": "Your Obsidian notes as a glowing 3D constellation.",
+      "tag": "Obsidian plugin",
+      "url": "https://github.com/7evyr/obsidian-nebula"
+    },
+    {
+      "title": "Trench Report",
+      "desc": "Grades any Solana wallet's memecoin trading like a report card.",
+      "tag": "MCP server",
+      "url": "https://github.com/7evyr/trench-report-mcp"
+    }
+  ],
+  "footer": {
+    "text": "GitHub",
+    "url": "https://github.com/7evyr"
+  }
+}
