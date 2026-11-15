@@ -1,25 +1,25 @@
 {
   "name": "zk",
   "avatar": "avatar.jpg",
-  "bio": "Things I built because I wanted them.",
+  "bio": "Things I build.",
   "links": [
     {
       "title": "Keep",
-      "desc": "Encrypted, offline. Your passwords never touch a server.",
+      "desc": "Vault keyed to the TPM through Windows Hello. Nothing leaves the machine.",
       "tag": "Windows app",
       "icon": "lock",
       "url": "https://github.com/7evyr/keep-vault"
     },
     {
       "title": "Nebula",
-      "desc": "Your Obsidian graph, but in 3D.",
+      "desc": "three.js render of your vault's link graph. Orbit it, fly through it.",
       "tag": "Obsidian plugin",
       "icon": "orbit",
       "url": "https://github.com/7evyr/obsidian-nebula"
     },
     {
       "title": "SignalDesk",
-      "desc": "Finds the bets worth taking. Grades itself after.",
+      "desc": "Models every line, flags the edge, grades its own picks after the game.",
       "tag": "Website",
       "icon": "chart",
       "url": "https://signaldesks.app"
