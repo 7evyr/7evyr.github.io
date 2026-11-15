@@ -1,25 +1,25 @@
 {
   "name": "zk",
   "avatar": "avatar.jpg",
-  "bio": "Selected systems, shipped.",
+  "bio": "Things I built because I wanted them.",
   "links": [
     {
       "title": "Keep",
-      "desc": "Local-first credential vault. Zero cloud surface.",
+      "desc": "Encrypted, offline. Your passwords never touch a server.",
       "tag": "Windows app",
       "icon": "lock",
       "url": "https://github.com/7evyr/keep-vault"
     },
     {
       "title": "Nebula",
-      "desc": "Force-directed 3D topology for Obsidian graphs.",
+      "desc": "Your Obsidian graph, but in 3D.",
       "tag": "Obsidian plugin",
       "icon": "orbit",
       "url": "https://github.com/7evyr/obsidian-nebula"
     },
     {
       "title": "SignalDesk",
-      "desc": "Positive-EV pick screening, post-settlement graded.",
+      "desc": "Finds the bets worth taking. Grades itself after.",
       "tag": "Website",
       "icon": "chart",
       "url": "https://signaldesks.app"
