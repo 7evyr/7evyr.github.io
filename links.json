@@ -5,21 +5,21 @@
   "links": [
     {
       "title": "Keep",
-      "desc": "Vault keyed to the TPM through Windows Hello. Nothing leaves the machine.",
+      "desc": "Password vault encrypted with a Windows Hello key held in the TPM.",
       "tag": "Windows app",
       "icon": "lock",
       "url": "https://github.com/7evyr/keep-vault"
     },
     {
       "title": "Nebula",
-      "desc": "three.js render of your vault's link graph. Orbit it, fly through it.",
+      "desc": "Obsidian plugin that renders your vault's link graph in 3D with three.js.",
       "tag": "Obsidian plugin",
       "icon": "orbit",
       "url": "https://github.com/7evyr/obsidian-nebula"
     },
     {
       "title": "SignalDesk",
-      "desc": "Models every line, flags the edge, grades its own picks after the game.",
+      "desc": "Sports information hub indexing players, teams and news across five leagues.",
       "tag": "Website",
       "icon": "chart",
       "url": "https://signaldesks.app"
