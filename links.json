@@ -1,25 +1,25 @@
 {
   "name": "zk",
   "avatar": "avatar.jpg",
-  "bio": "Stuff I've made.",
+  "bio": "Selected systems, shipped.",
   "links": [
     {
       "title": "Keep",
-      "desc": "Password manager that stays on your PC. No cloud, no account.",
+      "desc": "Local-first credential vault. Zero cloud surface.",
       "tag": "Windows app",
       "icon": "lock",
       "url": "https://github.com/7evyr/keep-vault"
     },
     {
       "title": "Nebula",
-      "desc": "Obsidian plugin that shows your notes as a 3D map you can spin around.",
+      "desc": "Force-directed 3D topology for Obsidian graphs.",
       "tag": "Obsidian plugin",
       "icon": "orbit",
       "url": "https://github.com/7evyr/obsidian-nebula"
     },
     {
       "title": "SignalDesk",
-      "desc": "Tells you if a bet is actually worth taking, then grades every pick after the game.",
+      "desc": "Positive-EV pick screening, post-settlement graded.",
       "tag": "Website",
       "icon": "chart",
       "url": "https://signaldesks.app"
